@@ -36,3 +36,7 @@ jobs:
           app-name: jira-gateway
           package: .
           publish-profile: ${{ secrets.AZURE_FUNCTIONAPP_PUBLISH_PROFILE }}
+          # publish-profile auth skips resource validation, so the action can't
+          # detect the plan type — declare it, or it uses the classic Kudu path
+          sku: flexconsumption
+          remote-build: false
