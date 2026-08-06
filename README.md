@@ -16,7 +16,7 @@ implemented by Claude Code from a Jira ticket, with no human-written implementat
 | GET | `/api/ticket/{ticketId}` | Get a Jira ticket | Human (seed) |
 | GET | `/api/projects` | List Jira projects | Claude Code |
 | POST | `/api/ticket` | Create a ticket | Claude Code |
-| GET | `/api/boards` | List boards | Claude Code |
+| GET | `/api/boards?projectKeyOrId=&type=` | List boards (optional filters; `type` is `scrum`, `kanban` or `simple`) | Claude Code |
 | GET | `/api/tickets?jql=...` | Search tickets by JQL | Claude Code |
 
 ## Auth
