@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import { JiraTicket } from "../types/jira";
+import { JiraTicket, JiraProject } from "../types/jira";
 
 function createJiraClient(): AxiosInstance {
   const baseUrl = process.env.JIRA_BASE_URL;
@@ -39,4 +39,24 @@ export async function getJiraTicket(ticketId: string): Promise<JiraTicket> {
     updated: issue.fields.updated,
     url: `${process.env.JIRA_BASE_URL}/browse/${issue.key}`,
   };
+}
+
+export async function listJiraProjects(): Promise<JiraProject[]> {
+  const client = createJiraClient();
+  const response = await client.get("/project");
+  const projects = response.data;
+
+  return projects.map((project: {
+    id: string;
+    key: string;
+    name: string;
+    projectTypeKey: string;
+    style: string;
+  }) => ({
+    id: project.id,
+    key: project.key,
+    name: project.name,
+    type: project.projectTypeKey,
+    style: project.style,
+  }));
 }
