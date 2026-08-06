@@ -6,7 +6,7 @@ implemented by Claude Code from a Jira ticket, with no human-written implementat
 
 ## Blog Posts
 
-- Part 1 — *coming soon*
+- [Part 1 — Learning Agentic Software Development: An Engineering Experiment](https://blog.jamienicholls.co.nz/2026/08/06/learning-agentic-software-development-an-engineering-experiment/)
 - Part 2 — *coming soon*
 
 ## Endpoints
