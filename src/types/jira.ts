@@ -19,6 +19,20 @@ export interface JiraProject {
   style: string;
 }
 
+export interface CreateTicketRequest {
+  projectKey: string;
+  summary: string;
+  issueType: string;
+  description?: string;
+  priority?: string;
+}
+
+export interface CreatedTicket {
+  id: string;
+  key: string;
+  url: string;
+}
+
 export interface JiraBoard {
   id: number;
   name: string;
