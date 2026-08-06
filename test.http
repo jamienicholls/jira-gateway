@@ -1,0 +1,14 @@
+### VS Code REST Client requests.
+### API_KEY is read from a local .env file (gitignored) via {{$dotenv API_KEY}} —
+### never paste a real key into this file; it is committed to a public repo.
+
+### Get a Jira ticket locally
+GET http://localhost:7071/api/ticket/TEST-1
+x-api-key: {{$dotenv API_KEY}}
+
+### Test missing auth (expect 401)
+GET http://localhost:7071/api/ticket/TEST-1
+
+### Test invalid ticket (expect 404)
+GET http://localhost:7071/api/ticket/INVALID-99999
+x-api-key: {{$dotenv API_KEY}}

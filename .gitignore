@@ -1,0 +1,15 @@
+# local secrets — never commit
+local.settings.json
+.env
+*.env.local
+
+# build output
+dist/
+coverage/
+
+# dependencies
+node_modules/
+
+# editor / OS
+.vscode/
+.DS_Store

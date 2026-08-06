@@ -1,0 +1,11 @@
+.git*
+.github
+.vscode
+local.settings.json
+test.http
+.env*
+src/
+tsconfig.json
+coverage
+CLAUDE.md
+README.md
