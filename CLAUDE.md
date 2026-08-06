@@ -39,6 +39,21 @@ REST API wrapper over the Jira REST API. This is a PoC for agentic development.
 - PR title: short, imperative (e.g. "Add GET /projects endpoint")
 - PR description must include: what changed, why, and the Jira ticket key
 
+## Jira Ticket Workflow — Keep The Board Honest
+The Jira ticket is how a human sees progress. Code that ships against a ticket still
+sitting in To Do is invisible work. Move the ticket as you go:
+
+1. **Before writing any code**, transition the ticket to **In Progress**
+2. **When you open the PR**, transition the ticket to **In Review** and comment the PR
+   link on the ticket
+3. **If the PR is merged while you are still working**, transition the ticket to **Done**.
+   If your session ends at PR-open, leave it In Review — the human moves it to Done on merge
+
+Available statuses in this project: `To Do`, `In Progress`, `In Review`, `Done`.
+Use the Jira MCP tools for all of this — never edit ticket status by any other route.
+
+Do not transition a ticket to Done because the code is written. Done means merged.
+
 ## Environment Variables (available via process.env)
 - `JIRA_BASE_URL` — Jira base URL e.g. https://yoursite.atlassian.net
 - `JIRA_EMAIL` — Jira account email
@@ -54,6 +69,7 @@ Never hardcode these. Never log them. Never include them in responses.
 - Do not skip the auth middleware on any endpoint
 - Do not commit to main directly
 - Do not add npm dependencies (see Dependencies above)
+- Do not leave a ticket in To Do while you work on it (see Jira Ticket Workflow above)
 
 ## Testing
 - Use Jest with ts-jest; run with `npm test` (or `npm run test:coverage`)
