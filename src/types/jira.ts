@@ -71,3 +71,12 @@ export interface CreatedComment {
   created: string;
   url: string;
 }
+
+export interface JiraTransition {
+  id: string;
+  name: string;
+}
+
+export interface TransitionTicketRequest {
+  status: string;
+}
