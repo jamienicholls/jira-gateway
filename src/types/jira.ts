@@ -57,3 +57,17 @@ export interface JiraSearchResult {
   nextPageToken?: string;
   issues: JiraSearchIssue[];
 }
+
+export interface AddCommentRequest {
+  body: string;
+}
+
+export interface CreatedComment {
+  id: string;
+  ticketKey: string;
+  // Echoes the plain text the caller sent — Jira stores it as ADF.
+  body: string;
+  author: string;
+  created: string;
+  url: string;
+}
