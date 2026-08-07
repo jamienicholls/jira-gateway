@@ -40,3 +40,20 @@ export interface JiraBoard {
   // Jira only sets location.projectKey for project-scoped boards.
   projectKey?: string;
 }
+
+export interface JiraSearchIssue {
+  id: string;
+  key: string;
+  summary: string;
+  status: string;
+  assignee: string;
+  priority: string;
+}
+
+export interface JiraSearchResult {
+  maxResults: number;
+  isLast: boolean;
+  // Cursor-based pagination — omitted once isLast is true.
+  nextPageToken?: string;
+  issues: JiraSearchIssue[];
+}

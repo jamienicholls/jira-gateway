@@ -5,6 +5,7 @@ import {
   CreateTicketRequest,
   CreatedTicket,
   JiraBoard,
+  JiraSearchResult,
 } from "../types/jira";
 
 function createJiraClient(apiPath = "/rest/api/3"): AxiosInstance {
@@ -108,6 +109,54 @@ export async function listJiraProjects(): Promise<JiraProject[]> {
     type: project.projectTypeKey,
     style: project.style,
   }));
+}
+
+export async function searchJiraTickets(
+  jql: string,
+  maxResults: number,
+  nextPageToken?: string
+): Promise<JiraSearchResult> {
+  const client = createJiraClient();
+
+  const params: Record<string, string | number> = {
+    jql,
+    maxResults,
+    fields: "summary,status,assignee,priority",
+  };
+  if (nextPageToken) params.nextPageToken = nextPageToken;
+
+  const response = await client.get("/search/jql", { params });
+  const data = response.data;
+
+  const issues = (data.issues ?? []).map((issue: {
+    id: string;
+    key: string;
+    fields: {
+      summary: string;
+      status?: { name: string };
+      assignee?: { displayName: string };
+      priority?: { name: string };
+    };
+  }) => ({
+    id: issue.id,
+    key: issue.key,
+    summary: issue.fields.summary,
+    status: issue.fields.status?.name ?? "Unknown",
+    assignee: issue.fields.assignee?.displayName ?? "Unassigned",
+    priority: issue.fields.priority?.name ?? "None",
+  }));
+
+  const result: JiraSearchResult = {
+    maxResults,
+    isLast: data.isLast,
+    issues,
+  };
+
+  if (!data.isLast && data.nextPageToken) {
+    result.nextPageToken = data.nextPageToken;
+  }
+
+  return result;
 }
 
 export async function listJiraBoards(
