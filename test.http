@@ -12,3 +12,20 @@ GET http://localhost:7071/api/ticket/TEST-1
 ### Test invalid ticket (expect 404)
 GET http://localhost:7071/api/ticket/INVALID-99999
 x-api-key: {{$dotenv API_KEY}}
+
+### Add a comment to a ticket (expect 201)
+POST http://localhost:7071/api/ticket/TEST-1/comment
+x-api-key: {{$dotenv API_KEY}}
+Content-Type: application/json
+
+{
+  "body": "Posted via jira-gateway."
+}
+
+### Add a comment without auth (expect 401)
+POST http://localhost:7071/api/ticket/TEST-1/comment
+Content-Type: application/json
+
+{
+  "body": "Posted via jira-gateway."
+}

@@ -18,6 +18,7 @@ implemented by Claude Code from a Jira ticket, with no human-written implementat
 | POST | `/api/ticket` | Create a ticket | Claude Code |
 | GET | `/api/boards?projectKeyOrId=&type=` | List boards (optional filters; `type` is `scrum`, `kanban` or `simple`) | Claude Code |
 | GET | `/api/tickets?jql=...` | Search tickets by JQL | Claude Code |
+| POST | `/api/ticket/{ticketId}/comment` | Add a comment to a ticket | Claude Code |
 
 ## Auth
 

@@ -6,6 +6,7 @@ import {
   CreatedTicket,
   JiraBoard,
   JiraSearchResult,
+  CreatedComment,
 } from "../types/jira";
 
 function createJiraClient(apiPath = "/rest/api/3"): AxiosInstance {
@@ -157,6 +158,27 @@ export async function searchJiraTickets(
   }
 
   return result;
+}
+
+export async function addJiraComment(
+  ticketId: string,
+  body: string
+): Promise<CreatedComment> {
+  const client = createJiraClient();
+  const response = await client.post(`/issue/${ticketId}/comment`, {
+    body: toAdf(body),
+  });
+  const comment = response.data;
+
+  return {
+    id: comment.id,
+    ticketKey: ticketId,
+    body,
+    author: comment.author?.displayName ?? "Unknown",
+    created: comment.created,
+    // focusedCommentId deep-links to the new comment rather than the ticket top.
+    url: `${process.env.JIRA_BASE_URL}/browse/${ticketId}?focusedCommentId=${comment.id}`,
+  };
 }
 
 export async function listJiraBoards(
