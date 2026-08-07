@@ -37,5 +37,6 @@ export interface JiraBoard {
   id: number;
   name: string;
   type: string;
-  projectKey: string;
+  // Jira only sets location.projectKey for project-scoped boards.
+  projectKey?: string;
 }

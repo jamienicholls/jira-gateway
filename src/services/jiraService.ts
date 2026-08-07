@@ -4,9 +4,10 @@ import {
   JiraProject,
   CreateTicketRequest,
   CreatedTicket,
+  JiraBoard,
 } from "../types/jira";
 
-function createJiraClient(): AxiosInstance {
+function createJiraClient(apiPath = "/rest/api/3"): AxiosInstance {
   const baseUrl = process.env.JIRA_BASE_URL;
   const email = process.env.JIRA_EMAIL;
   const apiToken = process.env.JIRA_API_TOKEN;
@@ -18,13 +19,18 @@ function createJiraClient(): AxiosInstance {
   const auth = Buffer.from(`${email}:${apiToken}`).toString("base64");
 
   return axios.create({
-    baseURL: `${baseUrl}/rest/api/3`,
+    baseURL: `${baseUrl}${apiPath}`,
     headers: {
       Authorization: `Basic ${auth}`,
       Accept: "application/json",
       "Content-Type": "application/json",
     },
   });
+}
+
+// Boards are served by the Agile API, not the standard REST API.
+function createJiraAgileClient(): AxiosInstance {
+  return createJiraClient("/rest/agile/1.0");
 }
 
 export async function getJiraTicket(ticketId: string): Promise<JiraTicket> {
@@ -101,5 +107,32 @@ export async function listJiraProjects(): Promise<JiraProject[]> {
     name: project.name,
     type: project.projectTypeKey,
     style: project.style,
+  }));
+}
+
+export async function listJiraBoards(
+  filters: { projectKeyOrId?: string; type?: string } = {}
+): Promise<JiraBoard[]> {
+  const client = createJiraAgileClient();
+
+  const params: Record<string, string> = {};
+  if (filters.projectKeyOrId) params.projectKeyOrId = filters.projectKeyOrId;
+  if (filters.type) params.type = filters.type;
+
+  const response = await client.get("/board", { params });
+
+  // The Agile API wraps results in a paged envelope, unlike /rest/api/3/project.
+  const boards = response.data.values ?? [];
+
+  return boards.map((board: {
+    id: number;
+    name: string;
+    type: string;
+    location?: { projectKey?: string };
+  }) => ({
+    id: board.id,
+    name: board.name,
+    type: board.type,
+    projectKey: board.location?.projectKey,
   }));
 }
